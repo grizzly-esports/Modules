@@ -12,7 +12,10 @@ namespace Grizzly\Modules;
 use Illuminate\Support\Facades\Validator,
     Illuminate\Support\Facades\View,
     Illuminate\Support\Facades\Config,
-    Illuminate\Support\Facades\Request;
+    Illuminate\Support\Facades\Request,
+    Grizzly\Models\Module,
+    Grizzly\Models\ModuleArea;
+
 
 /**
  * Class Modules
@@ -44,14 +47,14 @@ class Modules
      */
     public function __construct()
     {
-        foreach (\Module::all() as $Module)
+        foreach (Module::all() as $Module)
         {
             $this->installed[$Module->name] = array( 'id'       => $Module->id, 'name' => $Module->name,
                                                      'factory'  => $Module->factory, 'area' => $Module->area_id,
                                                      'priority' => $Module->priority
             );
         }
-        foreach (\ModuleArea::all() as $Area)
+        foreach (ModuleArea::all() as $Area)
         {
             $this->areas[$Area->slug] = array( 'id' => $Area->id, 'name' => $Area->name, 'status' => $Area->status );
         }
