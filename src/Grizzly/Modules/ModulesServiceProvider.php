@@ -33,6 +33,8 @@ class ModulesServiceProvider extends ServiceProvider {
         $this->app->booting(function(){
                 $loader = \Illuminate\Foundation\AliasLoader::getInstance();
                 $loader->alias('Modules', 'Grizzly\Modules\Facades\Modules');
+                $loader->alias('Module', 'Grizzly\Models\Module');
+                $loader->alias('ModuleArea', 'Grizzly\Models\ModuleArea');
             });
 
         // Bind the resource as a singleton so we don't abuse the database

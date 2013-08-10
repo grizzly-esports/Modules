@@ -1,4 +1,6 @@
-<?php
+<?php namespace Grizzly\Models;
+
+use Illuminate\Database\Eloquent\Model;
 /**
  * Grizzly eSports CMS
  *
@@ -24,7 +26,7 @@
  *
  */
 
-class Module extends \Illuminate\Database\Eloquent\Model {
+class Module extends Model {
 
     public static $new_module = array(
         'module_name' => 'required|min:5|unique:modules,name',
