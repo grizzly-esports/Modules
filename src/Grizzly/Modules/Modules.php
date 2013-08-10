@@ -208,34 +208,37 @@ class Modules
      */
     public function getModuleAreas()
     {
-        $Areas = \ModuleArea::all();
+        $Areas = \ModuleArea::find(3);
+
+        echo '<pre>'; print_r($Areas->modules);die();
+
 
         // iterate through areas
-        foreach ($Areas as $Area)
+        foreach ($this->areas as $area)
         {
             // iterate through installed modules
             foreach ($this->installed as $installed)
             {
-                if ($installed['area'] == $Area->id)
+                if ($installed['area'] == $area['id'])
                 {
-                    $Area->modules[$installed['name']] = $installed;
+                    $area['modules'][$installed['name']] = $installed;
                 }
             }
 
-            if (!empty( $Area->modules ))
+            if (!empty( $area['modules'] ))
             {
                 $priority = array();
-                foreach ($Area->modules as $name => $module)
+                foreach ($area['modules'] as $name => $module)
                 {
                     $priority[] = $module['priority'];
                 }
 
-                array_multisort( $Area->modules, SORT_DESC, $priority );
+                array_multisort( $area['modules'], SORT_DESC, $priority );
             }
         }
 
         // return
-        return $Areas;
+        return $this->areas;
     }
 
     /**
