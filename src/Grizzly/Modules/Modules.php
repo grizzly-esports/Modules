@@ -39,7 +39,7 @@ class Modules
     public $data = array(
         'title'     => '',
         'module_id' => '',
-        'objects'   => '',
+        'Objects'   => array(),
     );
 
     /**
@@ -131,7 +131,7 @@ class Modules
      *
      * @return bool|object
      */
-    private function readModule( $module_factory = '' )
+    public function readModule( $module_factory = '' )
     {
         $module_path = app_path() . '/modules/' . $module_factory . '.php';
 
@@ -181,7 +181,7 @@ class Modules
         // Retrieve its modules
         foreach ($this->installed as $installed)
         {
-            if ($installed['area'] = $area_id)
+            if ($installed['area'] == $area_id)
             {
                 $modules[$installed['name']] = $installed;
             }
@@ -262,7 +262,7 @@ class Modules
         $module = app_path() . '/modules/' . $this->installed[$module_name]['factory'] . '_Module.php';
 
         // Check if the module file exists
-        if (file_exists( $module ) && \Module::whereName( $module_name )->first()->exists())
+        if (file_exists( $module ) && Module::whereName( $module_name )->first()->exists())
         {
             // Include the module
             include_once( $module );
@@ -274,7 +274,7 @@ class Modules
             $Module = new $Class;
 
             // Return the module
-            return $Module->init( $module_name );
+            return $Module->start( $module_name );
         }
         else
         {
@@ -288,7 +288,7 @@ class Modules
      *
      * @return mixed
      */
-    public function init_module( $module )
+    public function initModule( $module )
     {
         // Create the module's path
         $path = app_path() . '/modules/' . $module . '.php';
@@ -325,7 +325,7 @@ class Modules
             }
         }
 
-        return \Validator::make( $data, $rules );
+        return Validator::make( $data, $rules );
     }
 
     /**
@@ -354,7 +354,7 @@ class Modules
      * @param       $path
      * @param array $data
      */
-    public function show_module( $path, $data = array() )
+    public function attachModule( $path, $data = array() )
     {
         // Graceful fallback to default theme view file
         // by replacing an unfound theme view with default
@@ -365,16 +365,12 @@ class Modules
             $path     = implode( '.', $parts );
         }
 
-        //echo View::make( MODULE . 'module' )->with('title', $data['title'])->nest( 'module_data', $path, $data['data'] );
-
         echo View::make( MODULE . 'module' )
-             ->with( 'title', $data['title'] )
+             ->with('title', $data['title'])
              ->with( 'module_id', $data['module_id'] )
-             ->with(
-                'module_data',
-                View::make( $path )
-                ->with( 'Objects', $data['Objects'] ? : '' )
-            );
+             ->nest( 'module_data', $path, $data['Objects'] );
+return;
+        //echo View::make( MODULE . 'module' )->with( 'title', $data['title'] )->with( 'module_id', $data['module_id'] )->with( 'module_data', View::make( $path )->with( 'Objects', $data['Objects'] ? : '' ) );
     }
 
     /**

@@ -1,6 +1,8 @@
 <?php namespace Grizzly\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator,
+    Illuminate\Database\Eloquent\Model;
+
 /**
  * Grizzly eSports CMS
  *
@@ -32,10 +34,5 @@ class Module extends Model {
         'module_name' => 'required|min:5|unique:modules,name',
         'area_id'     => 'required|not_in:0'
     );
-
-    public static function validate_new_module( $data )
-    {
-        return Validator::make( $data, static::$new_module );
-    }
 
 }
